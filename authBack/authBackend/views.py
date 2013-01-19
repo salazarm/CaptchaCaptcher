@@ -50,7 +50,7 @@ def drawLines(numbers,width,height,r,x,y,saveLoc):
 def generate(request):
     
     errorDisp = 3
-    TIMEOUT = 5
+    TIMEOUT = 60
     if request.method == "POST":
         #here is where u verify
 
