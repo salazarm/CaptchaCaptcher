@@ -7,7 +7,7 @@ def drawLines(numbers,width,height,r,x,y,saveLoc):
 	n = len(numbers) # init vars 
 	new_im = Image.new('RGB', (width,height)) # draw canvas 
 	draw = ImageDraw.Draw(new_im)
-	draw.ellipse((x-r, y-r, x+r, y+r)) # draw circle 
+	# draw.ellipse((x-r, y-r, x+r, y+r)) # draw circle 
 
 	# Use n to generate the angles 
 	increment = 2.0*math.pi/n
@@ -17,9 +17,9 @@ def drawLines(numbers,width,height,r,x,y,saveLoc):
 		angles.append(last+increment)
 		last = last+increment
 
-	# Draw all angle lines 
-	for i in range(n): 
-		draw.line([(x,y),(x+r*math.cos(angles[i]+math.pi/2.0),y+r*math.sin(angles[i]+math.pi/2.0))])
+	# # Draw all angle lines 
+	# for i in range(n): 
+	# 	draw.line([(x,y),(x+r*math.cos(angles[i]+math.pi/2.0),y+r*math.sin(angles[i]+math.pi/2.0))])
 
 	# Paint numbers as a clock 
 	for i in range(n): 
