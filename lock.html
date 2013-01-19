@@ -150,15 +150,15 @@
 		}
 
 
-		var dialCenter   = [129,124];
+		var dialCenter   = [150,150];
 		var needleCenter = [ 13, 121.5 ];
 		var dial = new Image, needle = new Image;
 		
 		var c = document.getElementsByTagName('canvas')[0];
 		var ctx = c.getContext('2d');
 		
-		dial.src = 'dial.png';
-		needle.src = 'needle.png';
+		dial.src = '{{STATIC_URL}}dial.jpg';
+		needle.src = '{{STATIC_URL}}needle.png';
 
 		var timeGood = 0
 		var lastDisp = 0
@@ -172,15 +172,28 @@
 
 			minElem = 600
 			maxElem = -600
+			avg = 0
 			for(var x = 0; x < last60.length; x++){
 				minElem = Math.min(minElem,last60[x])
 				maxElem = Math.max(maxElem,last60[x])
-				console.log("min" + minElem)
+				avg += last60[x]
 			}
 			count += 1
 
 			if(Math.abs(maxElem - minElem) < 5 && last60.length == 60){
-				alert('done')
+				 
+	            $.ajax({
+	                url: "/auth",
+	                type:"POST",
+	                dataType:"json",
+	                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'avg': avg/60},
+	                success: function( data ) {
+	                    alert(data)
+	                },
+	                 error:function (xhr, ajaxOptions, thrownError){
+	                    alert(thrownError);
+	                }  
+	            });
 			}
 			
 			/*
@@ -211,7 +224,7 @@
 
 			// Center the needle on the canvas.
 			ctx.rotate( displacement/100*Math.PI*2- 0.15 );
-			ctx.drawImage( needle, -needleCenter[0], -needleCenter[1] );
+			ctx.drawImage( needle, -needleCenter[0]+1, -needleCenter[1] );
 
 			ctx.restore();
 
@@ -303,7 +316,7 @@
 	<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
 	<!DOCTYPE HTML>
 
-    <canvas id="myCanvas" width="578" height="200"></canvas>
+    <canvas id="myCanvas" width="578" height="500"></canvas>
 
 
 
