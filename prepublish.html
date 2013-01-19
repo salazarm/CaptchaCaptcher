@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OpenTok Sample &#8212; Pre-publish set-up</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		var d = new Date();
+		var n = d.getTime();
+		/*var now = new Date();
+
+		now.format("m/dd/yy");
+		// Returns, e.g., 6/09/07
+
+		// Can also be used as a standalone function
+		dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+		// Saturday, June 9th, 2007, 5:46:21 PM
+*/
+$(document).ready(function(){
+
+		function printTime(){
+			var d = new Date();
+			var n = d.getTime();
+			$('#test').html(n)
+		}
+		
+		myVar = setInterval(function(){printTime()},1)
+		
+
+		});
+	</script>
+</head>
+<body>
+<div id="test">
+
+</div>
+</body>
+</html>
