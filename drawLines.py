@@ -5,7 +5,7 @@ import math
 ## Making clock drawing function based on combineImage.py
 def drawLines(numbers,width,height,r,x,y,saveLoc):
 	n = len(numbers) # init vars 
-	new_im = Image.new('RGB', (width,height)) # draw canvas 
+	new_im = Image.new('RGBA', (width,height),(255,255,255,0)) # draw canvas 
 	draw = ImageDraw.Draw(new_im)
 	# draw.ellipse((x-r, y-r, x+r, y+r)) # draw circle 
 
@@ -23,10 +23,17 @@ def drawLines(numbers,width,height,r,x,y,saveLoc):
 
 	# Paint numbers as a clock 
 	for i in range(n): 
-		draw.text((x+r*math.cos(angles[i]+math.pi/2.0),y+r*math.sin(angles[i]+math.pi/2.0)),str(numbers[i]))
+		draw.text((x+r*math.cos(angles[i]+math.pi/2.0),y+r*math.sin(angles[i]+math.pi/2.0)),str(numbers[i]),fill='blue')
 
-	new_im.save(saveLoc,"JPEG")
+	new_im.save(saveLoc)
 	new_im.show()
+
+	tuples = zip(numbers,angles)
+	d = dict()
+	for t in range(len(tuples)): 
+		d[tuples[t][0]] = (tuples[t][1]-math.pi)*50/math.pi
+	print d
+	return d 
 
 # Sample usage 
 x = 150 
@@ -38,4 +45,4 @@ height = 300
 numbers = [] 
 for i in range(1,1+n): 
 	numbers.append(i) 
-drawLines(numbers,width,height,r,width/2,height/2,'test.jpg')
+drawLines(numbers,width,height,r,width/2,height/2,'test.png')
