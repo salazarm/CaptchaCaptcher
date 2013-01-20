@@ -121,11 +121,20 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authBackend',
+    'facebook',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+FACEBOOK_APP_ID = '126791957489362'
+FACEBOOK_APP_SECRET = '565c76ee9d26ca5baa32d8c8b63ef0cc'
+
+FACEBOOK_SCOPE = 'email,publish_actions,user_birthday'
+
+AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

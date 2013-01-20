@@ -55,7 +55,7 @@ def drawLines(imageLoc,numbers,width,height,r,x,y,saveLoc):
 
 def generate(request):
     
-    errorDisp = 3
+    errorDisp = 5
     TIMEOUT = 60
     is_ajax_req = False
     totalNum = 3
@@ -117,3 +117,5 @@ def generate(request):
 
     return render_to_response('lock.html', {'img': imageUrl, 'ans' : ans}, context_instance=RequestContext(request))
     
+def home(request):
+    return render_to_response('home.html', context_instance=RequestContext(request))
