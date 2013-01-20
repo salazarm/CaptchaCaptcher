@@ -47,8 +47,6 @@
 
 	<script src="../static/files/bootstrap.min.js"></script>
 	
-
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/files/screen_preview.css">
     <link rel="stylesheet" href="../static/files/bootstrap.css">
     <link rel="stylesheet" href="../static/files/bootstrap-responsive.min.css">
 	
@@ -97,11 +95,19 @@
 		}
 
 		function tick() {
-
-			
+		   
 			compatibility.requestAnimationFrame(tick);
 
 			if (video.readyState === video.HAVE_ENOUGH_DATA) {
+			   canvas2= $("#canvas").get(0);
+	           canvas2.width = video.videoWidth;
+	           canvas2.height = video.videoHeight;
+	           context2 = canvas2.getContext('2d');
+	           context2.translate(video.videoWidth,0);
+	           context2.scale(-1,1);
+	           canvas2.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+			
+
 				$(video).objectdetect("all", {scaleMin: 3, scaleFactor: 1.1, classifier: objectdetect.frontalface}, function(coords) {
 					if (coords[0]) {
 
@@ -138,7 +144,7 @@
 			} 
 		}
 
-
+		var lastDisp = 0
 
 		function setLock(coords){
 			x = coords[0] + coords[2]/2; // top left x + width/2
@@ -152,14 +158,14 @@
 
 
            //console.log( "x is: " + x + " y is: " + y + "coords: 0,1,2,3,4: " + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3] + " " + coords[4]);
-           console.log("displacement is: " + displacement);
-
+         
+           lastDisp = displacement
            setPos(displacement)
 
 
 		}
 
-
+		
 		var dialCenter   = [150,150];
 		var needleCenter = [ 13, 121.5 ];
 		var dial = new Image, needle = new Image;
@@ -167,97 +173,52 @@
 		var c = document.getElementsByTagName('canvas')[0];
 		var ctx = c.getContext('2d');
 		
-		dial.src = 'static/{{img}}';
+		dial.src = '{{img}}';
 		needle.src = 'static/needle.png';
 
-		var reqSent = false
-		var timeGood = 0
-		var lastDisp = 0
-		var errorDisp = 5
+		$(document).keyup(function(e){
+			if (e.keyCode == 32){
+				$.ajax({
+	                url: "/",
+	                type:"POST",
+	                dataType:"json",
+	                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'avg': lastDisp},
+	                success: function( data ) {
+	                    obj = data[0]
 
-		var last60 = new Array()
-		var count = 0
+	                   //alert(obj.status)
+	                    if(obj.status == "corr"){
+	                    	window.location = obj.url
+	                    } 
+	                    if (obj.left == 0){
+	                    	window.location = obj.url
+	                    }
+
+						last60 = new Array()
+						count = 0
+						dial.src = obj.img;
+
+						$('#goal').html(obj.ans)
+
+	                   
+	                	$('#triesLeft').html(obj.left)
+	                	$('#incorrect').show();
+	                	$('#incorrect').fadeOut(1000);
+	                    
+
+						
+	                },
+	                 error:function (xhr, ajaxOptions, thrownError){
+	                 	reqSent = false
+	                    alert(thrownError);
+	                }  
+
+		        });
+			}
+		})
+
 		function setPos(displacement){
-			
-			last60[count%60] = displacement
-
-			minElem = 600
-			maxElem = -600
-			avg = 0
-			for(var x = 0; x < last60.length; x++){
-				minElem = Math.min(minElem,last60[x])
-				maxElem = Math.max(maxElem,last60[x])
-				avg += last60[x]
-			}
-			count += 1
-
-			if(Math.abs(maxElem - minElem) < 5 && last60.length == 60){
-
-					 /*$('<form action="." method="POST">' + 
-					 	"{% csrf_token %}"+
-				    '<input type="hidden" name="avg" value="' + avg/60 + '">' +
-				    '</form>').submit();*/
-				if (!reqSent){
-					reqSent = true
-		            $.ajax({
-		                url: "/",
-		                type:"POST",
-		                dataType:"json",
-		                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'avg': avg/60},
-		                success: function( data ) {
-		                    obj = data[0]
-
-		                   //alert(obj.status)
-		                    if(obj.left == 0){
-		                    	window.location = "http://www.google.com/"
-		                    }
-		                    if(obj.status == "corr"){
-		                    	$('#msg').html("CORRECT, You have to answer " + obj.left + " more correctly out of 3")
-		                    	$('#correct').show();
-		                    	$('#correct').fadeOut(2000);
-		                    }
-		                    else{
-		                    	$('#msg').html("INCORRECT, You have to answer " + obj.left + " more correctly out of 3")
-		                    	$('#incorrect').show();
-		                    	$('#incorrect').fadeOut(2000);
-		                    }
-
-
-		                    timeGood = 0
-							lastDisp = 0
-							errorDisp = 5
-							last60 = new Array()
-							dial.src = 'static/' + obj.img;
-							$('#goal').html("Try to find " + obj.ans)
-
-							reqSent = false
-							
-		                },
-		                 error:function (xhr, ajaxOptions, thrownError){
-		                 	reqSent = false
-		                    alert(thrownError);
-		                }  
-		            });
-				}
-		}
-			
-			/*
-			if (Math.abs(displacement - actualAns) < errorDisp ){
-
-				timeGood += 1
-				if (timeGood >= 60){
-					console.log('You have won')
-				}
-				console.log(timeGood)
-			}
-			else
-			{
-				timeGood = 0
-			}*/
-
-
-			
-
+		           
 			
 
 			ctx.save();
@@ -366,14 +327,15 @@
 		<div id="row-fluid">
 		  	
 		  	<div id="span12">
-		  		<h1 class="special" id="goal">Try to find {{ans}}</h1>
+		  		<h1 class="special">Try to find <span style="color:red" id="goal">{{ans}}</span></h1>
+		  		<h3 class="special" align="center">You have <span style="color:red" id="triesLeft">3</span> tries left</h3>
 		  	</div>
 		 </div>
 
 		 <hr>
 		 <span class="label label-info special offset4">Instructions:</span> Move your head to the left or right to move the needle to the RIGHT and LEFT respectively.
 		 <span id="incorrect" class="label label-warning special offset5" style="display: none">Incorrect input. Please try again.</span>
-		 <span id="correct" class="label label-success special offset5" style="display: none">Correct input. Please try again.</span>
+		 <span id="correct" class="label label-success special offset5" style="display: none">Correct input. Good job.</span>
 
 		 <hr>
 		 <div id="row-fluid">
@@ -383,7 +345,8 @@
 			 	</span>
 
 			  	<span id ="span6">
-					<video id="video" style="width:578px; margin-right: 5%;" class="pull-right" height="500"></video>
+					<video id="video" style="width:578px; margin-right: 5%; display:none" class="pull-right" height="500 "></video>
+					<canvas id="canvas"></video>
 				</span>	 
 			</div>
 		</div>

@@ -122,7 +122,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'authBackend',
     'facebook',
-    #'guinicorn',
+    #'gunicorn',
 
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
