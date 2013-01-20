@@ -117,5 +117,8 @@ def generate(request):
 
     return render_to_response('lock.html', {'img': imageUrl, 'ans' : ans}, context_instance=RequestContext(request))
     
+def api(request): 
+    return HttpResponse('<h1>You can find your API key here: '+ math.random(10,100)+'</h1>')
+
 def home(request):
     return render_to_response('home.html', context_instance=RequestContext(request))
