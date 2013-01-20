@@ -5,9 +5,11 @@
 <style type="text/css">
   html { height: 100% }
   body { height: 100%; margin: 0; padding: 0 }
+  h1.special {text-align:center}
 </style>
 
 <head>
+
 	<style>
       body {
         margin: 0px;
@@ -18,6 +20,7 @@
       }
       canvas { display:block; border:1px solid #aaa; margin:1em auto; background:#eee; }
     </style>
+
 
 	<meta charset="utf-8">
 
@@ -31,17 +34,24 @@
 
 
 	
-	<title>Full Immersion: HELLO WORLD... a.k.a. Google Holla At ME</title>
+	<title>Gesture Captcha Demo</title>
 
-	<script src="static/js/compatibility.js"></script>
-	<script src="static/js/smoother.js"></script>
+	<script src="../static/js/compatibility.js"></script>
+	<script src="../static/js/smoother.js"></script>
 
-	<script src="static/js/objectdetect.js"></script>
-	<script src="static/js/objectdetect.frontalface.js"></script>
+	<script src="../static/js/objectdetect.js"></script>
+	<script src="../static/js/objectdetect.frontalface.js"></script>
 
-	<script src="static/js/jquery-1.8.0.min.js"></script>
-	<script src="static/js/jquery.objectdetect.js"></script>
+	<script src="../static/js/jquery-1.8.0.min.js"></script>
+	<script src="../static/js/jquery.objectdetect.js"></script>
 
+	<script src="../static/files/bootstrap.min.js"></script>
+	<script src="../static/files/screen_preview.css"></script>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="../static/files/screen_preview.css">
+    <link rel="stylesheet" href="../static/files/bootstrap.css">
+    <link rel="stylesheet" href="../static/files/bootstrap-responsive.min.css">
+	
 	<script>
 	var smoother = new Smoother(0.5, [0, 0, 0, 0, 0]);
 	
@@ -336,27 +346,46 @@
 <body onload="initialize();" onunload="GUnload()">
 	<div name="pano" id="pano" style="z-index:-1; position: absolute; width: 100%; height: 100%"></div>
 
-	<div name="buttons" id="buttons" style="position: absolute; top:0; right: 0;">
-		<button type="button" onClick = "fullScreen()" style="float: top;">Full Screen!</button>
-		<button type="button" onClick = "smallScreen()" style="float: top;">Small Screen!</button>
-	</div>
-	
-	<div id="msg">
+ 	<div id="main">
+    	<div id="tray" class="topbar" sty1le="width: auto;">
+        	<div class="fill">
+            	<div class="container">
+                 	<a class="brand" href="#"><img src="../static/files/logo.png"></a>  
+                  </div>
+            </div>
+        </div>
 
-	</div>
-	<div id="goal">
-		Try to find {{ans}}
-	</div>
-	  <video id="video" style="float:right; margin-right:1em; width: 600px;"></video>  
-	
+      <br>
+ 	
+ 	<div id="container-fluid">
 
-	
-	<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
-	<!DOCTYPE HTML>
+		<div id="row-fluid">
+		  	
+		  	<div id="span12">
+		  		<h1 class="special">Try to find {{ans}}</h1>
+		  	</div>
+		 </div>
 
-    <canvas id="myCanvas" width="578" height="500"></canvas>
+		 <div id="row-fluid">
 
+		 	<div id="span6" style="padding:20px;">
+		 		<canvas id="myCanvas" width="578" height="500"></canvas>
+		 	</div>
 
+		  	<div id ="span6" style="padding:20px;">
+				<video id="video" style="float:right; margin-right:1em; width: 600px;"></video>
+			</div>	 
+
+			<div id="span12" style="text-align: center;"
+				<div name="buttons" id="buttons" class="btn-group">
+		  			<button class="btn btn-primary" onClick="fullScreen()">Full Screen</button>
+		  			<button class="btn btn-primary" onClick="smallScreen()">Small Screen</button>
+				</div>
+			</div>
+		
+			<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
+
+		</div>
 
 </body>
 </html>
