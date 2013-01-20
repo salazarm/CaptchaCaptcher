@@ -97,7 +97,7 @@ def generate(request):
     n = 24
     width = 300 
     height = 300  
-    angles = drawLines('/Users/prabhav/Documents/development/pennapps/authBack/static/lock_template.png',randSet,width,height,r,width/2-5,height/2-5,'/Users/prabhav/Documents/development/pennapps/authBack/static/lock.png')
+    angles = drawLines('static/lock_template.png',randSet,width,height,r,width/2-5,height/2-5,'static/lock.png')
 
 
     #get image back

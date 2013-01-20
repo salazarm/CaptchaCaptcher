@@ -46,7 +46,7 @@
 	<script src="../static/js/jquery.objectdetect.js"></script>
 
 	<script src="../static/files/bootstrap.min.js"></script>
-	<script src="../static/files/screen_preview.css"></script>
+	
 
     <link rel="stylesheet" type="text/css" media="screen" href="../static/files/screen_preview.css">
     <link rel="stylesheet" href="../static/files/bootstrap.css">
@@ -213,9 +213,13 @@
 		                    }
 		                    if(obj.status == "corr"){
 		                    	$('#msg').html("CORRECT, You have to answer " + obj.left + " more correctly out of 3")
+		                    	$('#correct').show();
+		                    	$('#correct').fadeOut(2000);
 		                    }
 		                    else{
 		                    	$('#msg').html("INCORRECT, You have to answer " + obj.left + " more correctly out of 3")
+		                    	$('#incorrect').show();
+		                    	$('#incorrect').fadeOut(2000);
 		                    }
 
 
@@ -362,20 +366,24 @@
 		<div id="row-fluid">
 		  	
 		  	<div id="span12">
-		  		<h1 class="special">Try to find {{ans}}</h1>
+		  		<h1 class="special" id="goal">Try to find {{ans}}</h1>
 		  	</div>
 		 </div>
 
 		 <hr>
+		 <span class="label label-info special offset4">Instructions:</span> Move your head to the left or right to move the needle to the RIGHT and LEFT respectively.
+		 <span id="incorrect" class="label label-warning special offset5" style="display: none">Incorrect input. Please try again.</span>
+		 <span id="correct" class="label label-success special offset5" style="display: none">Correct input. Please try again.</span>
 
+		 <hr>
 		 <div id="row-fluid">
-		 	<div id="span10 offset1">
+		 	<div id="span12">
 			 	<span id="span6">
-			 		<canvas id="myCanvas" width="578" height="500"></canvas>
+			 		<canvas id="myCanvas" style="margin-left: 5%;" width="578" height="500"></canvas>
 			 	</span>
 
-			  	<span id ="span6 pull-right" style="margin-right:10px">
-					<video id="video" width="578" height="500"></video>
+			  	<span id ="span6">
+					<video id="video" style="width:578px; margin-right: 5%;" class="pull-right" height="500"></video>
 				</span>	 
 			</div>
 		</div>
@@ -383,12 +391,6 @@
 		<hr>
 
 		<div id="row-fluid">
-			<div id="span12" style="text-align: center;">
-				<div name="buttons" id="buttons" class="btn-group">
-		  			<button class="btn btn-primary" onClick="fullScreen()">Full Screen</button>
-		  			<button class="btn btn-primary" onClick="smallScreen()">Small Screen</button>
-				</div>
-			</div>
 		
 			<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
 
