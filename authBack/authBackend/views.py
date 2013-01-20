@@ -60,23 +60,23 @@ def generate(request):
     is_ajax_req = False
     totalNum = 3
 
-    if 'num-correct' not in request.session or  request.session['num-correct'] >= 3:
-        request.session['num-correct'] = 0
     if request.is_ajax():
         is_ajax_req = True
         is_correct = False
         #here is where u verify
 
-        avg = float(request.POST.get('avg'))
-        print "=========================" + str(avg)
-
+        avg = -1 * float(request.POST.get('avg'))
+        request.session['num-total'] += 1
         if time.time() - request.session['time'] <= TIMEOUT:
             if abs(avg - request.session['ans-offset']) < errorDisp:
                 request.session['num-correct'] += 1
                 is_correct = True
+    else:
+        request.session['num-total'] = 0
+        request.session['num-correct'] = 0
             
 
-    charSet = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20', '21','22','23','24','25', 'a','b','c','d','e','f','g']
+    charSet = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20', '21','22','23','24','25']#, 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
     
     randSet = []
     setLen = 24
@@ -87,17 +87,17 @@ def generate(request):
 
     random.shuffle(randSet)
 
-    imageUrl = 'lock.png'
+    imageUrl = 'static/lock'+ str(int(time.time() + time.time()))  +'.png'
     
 
     # Sample usage 
     x = 150 
     y = 150 
-    r = 100
+    r = 80
     n = 24
     width = 300 
     height = 300  
-    angles = drawLines('static/lock_template.png',randSet,width,height,r,width/2-5,height/2-5,'static/lock.png')
+    angles = drawLines('static/dial.png',randSet,width,height,r,width/2-5,height/2-5,imageUrl)
 
 
     #get image back
@@ -109,10 +109,22 @@ def generate(request):
     request.session['time'] = time.time()
 
     if is_ajax_req:
-        if is_correct:
-            json = simplejson.dumps( [{'status': 'corr','img': imageUrl, 'ans' : ans, 'left': totalNum -  request.session['num-correct']}])
+        url = ""
+
+        if totalNum - request.session['num-total'] <= 0:
+            url = "http://www.youfail.org"
+
+        if request.session['num-correct'] >= 1:
+            numLeft = 0
+            url = "http://www.google.com"
         else:
-            json = simplejson.dumps( [{'status': 'incorr','img': imageUrl, 'ans' : ans, 'left': totalNum - request.session['num-correct']}])
+            numLeft = totalNum -  request.session['num-total']
+
+
+        if is_correct:
+            json = simplejson.dumps( [{'status': 'corr','img': imageUrl, 'ans' : ans, 'left': numLeft, 'url': url}])
+        else:
+            json = simplejson.dumps( [{'status': 'incorr','img': imageUrl, 'ans' : ans, 'left': numLeft, 'url': url}])
         return HttpResponse(json,content_type='application/json')
 
     return render_to_response('lock.html', {'img': imageUrl, 'ans' : ans}, context_instance=RequestContext(request))

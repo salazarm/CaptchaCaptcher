@@ -26,6 +26,8 @@ DATABASES = {
 # In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'America/Chicago'
 
+AUTHENTICATION_BACKENDS = ('facebookLogin.backend.FacebookBackend', 'django.contrib.auth.backends.ModelBackend',)
+
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
@@ -121,8 +123,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'authBackend',
-    'facebook',
-    #'guinicorn',
+    'facebookLogin',
+    #'gunicorn',
 
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
@@ -135,7 +137,7 @@ FACEBOOK_APP_SECRET = '565c76ee9d26ca5baa32d8c8b63ef0cc'
 
 FACEBOOK_SCOPE = 'email,publish_actions,user_birthday'
 
-AUTH_PROFILE_MODULE = 'facebook.FacebookProfile'
+AUTH_PROFILE_MODULE = 'facebookLogin.FacebookProfile'
 
 
 # A sample logging configuration. The only tangible logging
