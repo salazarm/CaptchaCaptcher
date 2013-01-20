@@ -5,11 +5,9 @@
 <style type="text/css">
   html { height: 100% }
   body { height: 100%; margin: 0; padding: 0 }
-  h1.special {text-align:center}
 </style>
 
 <head>
-
 	<style>
       body {
         margin: 0px;
@@ -19,8 +17,9 @@
         border: 1px solid #9C9898;
       }
       canvas { display:block; border:1px solid #aaa; margin:1em auto; background:#eee; }
-    </style>
 
+        
+    </style>
 
 	<meta charset="utf-8">
 
@@ -33,25 +32,18 @@
 
 
 
-	
-	<title>Gesture Captcha Demo</title>
+	<script src="http://maps.googleapis.com/maps/api/js?v=3&sensor=false"></script>
+	<title>Full Immersion: HELLO WORLD... a.k.a. Google Holla At ME</title>
 
-	<script src="../static/js/compatibility.js"></script>
-	<script src="../static/js/smoother.js"></script>
+	<script src="http://dl.dropbox.com/u/110033260/compatibility.js"></script>
+	<script src="http://dl.dropbox.com/u/110033260/smoother.js"></script>
 
-	<script src="../static/js/objectdetect.js"></script>
-	<script src="../static/js/objectdetect.frontalface.js"></script>
+	<script src="http://dl.dropbox.com/u/110033260/objectdetect.js"></script>
+	<script src="http://dl.dropbox.com/u/110033260/objectdetect.frontalface.js"></script>
 
-	<script src="../static/js/jquery-1.8.0.min.js"></script>
-	<script src="../static/js/jquery.objectdetect.js"></script>
+	<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<script src="http://dl.dropbox.com/u/110033260/jquery.objectdetect.js"></script>
 
-	<script src="../static/files/bootstrap.min.js"></script>
-	<script src="../static/files/screen_preview.css"></script>
-
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/files/screen_preview.css">
-    <link rel="stylesheet" href="../static/files/bootstrap.css">
-    <link rel="stylesheet" href="../static/files/bootstrap-responsive.min.css">
-	
 	<script>
 	var smoother = new Smoother(0.5, [0, 0, 0, 0, 0]);
 	
@@ -154,88 +146,44 @@
            //console.log( "x is: " + x + " y is: " + y + "coords: 0,1,2,3,4: " + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3] + " " + coords[4]);
            console.log("displacement is: " + displacement);
 
-           setPos(displacement)
+           setPos(displacement, 20)
 
 
 		}
 
 
-		var dialCenter   = [150,150];
+		var dialCenter   = [129,124];
 		var needleCenter = [ 13, 121.5 ];
 		var dial = new Image, needle = new Image;
 		
 		var c = document.getElementsByTagName('canvas')[0];
 		var ctx = c.getContext('2d');
 		
-		dial.src = 'static/{{img}}';
-		needle.src = 'static/needle.png';
+		dial.src = 'dial.png';
+		needle.src = 'needle.png';
 
-		var reqSent = false
 		var timeGood = 0
 		var lastDisp = 0
 		var errorDisp = 5
 
 		var last60 = new Array()
 		var count = 0
-		function setPos(displacement){
+		function setPos(displacement, actualAns){
 			
 			last60[count%60] = displacement
 
 			minElem = 600
 			maxElem = -600
-			avg = 0
 			for(var x = 0; x < last60.length; x++){
 				minElem = Math.min(minElem,last60[x])
 				maxElem = Math.max(maxElem,last60[x])
-				avg += last60[x]
+				console.log("min" + minElem)
 			}
 			count += 1
 
 			if(Math.abs(maxElem - minElem) < 5 && last60.length == 60){
-
-					 /*$('<form action="." method="POST">' + 
-					 	"{% csrf_token %}"+
-				    '<input type="hidden" name="avg" value="' + avg/60 + '">' +
-				    '</form>').submit();*/
-				if (!reqSent){
-					reqSent = true
-		            $.ajax({
-		                url: "/",
-		                type:"POST",
-		                dataType:"json",
-		                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'avg': avg/60},
-		                success: function( data ) {
-		                    obj = data[0]
-
-		                   //alert(obj.status)
-		                    if(obj.left == 0){
-		                    	window.location = "http://www.google.com/"
-		                    }
-		                    if(obj.status == "corr"){
-		                    	$('#msg').html("CORRECT, You have to answer " + obj.left + " more correctly out of 3")
-		                    }
-		                    else{
-		                    	$('#msg').html("INCORRECT, You have to answer " + obj.left + " more correctly out of 3")
-		                    }
-
-
-		                    timeGood = 0
-							lastDisp = 0
-							errorDisp = 5
-							last60 = new Array()
-							dial.src = 'static/' + obj.img;
-							$('#goal').html("Try to find " + obj.ans)
-
-							reqSent = false
-							
-		                },
-		                 error:function (xhr, ajaxOptions, thrownError){
-		                 	reqSent = false
-		                    alert(thrownError);
-		                }  
-		            });
-				}
-		}
+				alert('done')
+			}
 			
 			/*
 			if (Math.abs(displacement - actualAns) < errorDisp ){
@@ -265,7 +213,7 @@
 
 			// Center the needle on the canvas.
 			ctx.rotate( displacement/100*Math.PI*2- 0.15 );
-			ctx.drawImage( needle, -needleCenter[0]+1, -needleCenter[1] );
+			ctx.drawImage( needle, -needleCenter[0], -needleCenter[1] );
 
 			ctx.restore();
 
@@ -345,54 +293,21 @@
 
 <body onload="initialize();" onunload="GUnload()">
 	<div name="pano" id="pano" style="z-index:-1; position: absolute; width: 100%; height: 100%"></div>
+	<div name="buttons" id="buttons" style="position: absolute; top:0; right: 0;">
+		<button type="button btn-primary" onClick = "fullScreen()" style="float: top;">Full Screen!</button>
+		<button type="button btn-primary" onClick = "smallScreen()" style="float: top;">Small Screen!</button>
+	</div>
+	
+	  <video id="video" style="float:right; margin-right:1em; width: 600px;"></video>  
+	
 
- 	<div id="main">
-    	<div id="tray" class="topbar" sty1le="width: auto;">
-        	<div class="fill">
-            	<div class="container">
-                 	<a class="brand" href="#"><img src="../static/files/logo.png"></a>  
-                  </div>
-            </div>
-        </div>
+	
+	<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
+	<!DOCTYPE HTML>
 
-      <br>
- 	
- 	<div id="container-fluid">
+    <canvas id="myCanvas" width="578" height="200"></canvas>
 
-		<div id="row-fluid">
-		  	
-		  	<div id="span12">
-		  		<h1 class="special">Try to find {{ans}}</h1>
-		  	</div>
-		 </div>
 
-		 <hr>
-
-		 <div id="row-fluid">
-		 	<div id="span10 offset1">
-			 	<span id="span6">
-			 		<canvas id="myCanvas" width="578" height="500"></canvas>
-			 	</span>
-
-			  	<span id ="span6 pull-right" style="margin-right:10px">
-					<video id="video" width="578" height="500"></video>
-				</span>	 
-			</div>
-		</div>
-
-		<hr>
-
-		<div id="row-fluid">
-			<div id="span12" style="text-align: center;">
-				<div name="buttons" id="buttons" class="btn-group">
-		  			<button class="btn btn-primary" onClick="fullScreen()">Full Screen</button>
-		  			<button class="btn btn-primary" onClick="smallScreen()">Small Screen</button>
-				</div>
-			</div>
-		
-			<img id="glasses" src="http://dl.dropbox.com/u/110033260/batman.jpg" style="position:absolute; display:none">
-
-		</div>
 
 </body>
 </html>
