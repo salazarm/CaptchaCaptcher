@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en-us"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <meta charset="utf-8">
+                <title>Captcha Captcher</title>
+                <meta name="viewport" content="width=1024">
+                <link rel="stylesheet" type="text/css" media="screen" href="static/files/screen_preview.css">
+                <link rel="stylesheet" href="static/files/bootstrap.css">
+                <link rel="stylesheet" href="static/files/bootstrap-responsive.min.css">
+                <script src="static/files/behavior.js"></script><style type="text/css"></style>
+        </head>
+        <body>
+                <div id="main">
+                        <div id="tray" class="topbar" sty1le="width: auto;">
+                                <div class="fill">
+                                        <div class="container">
+                                                <a class="brand" href="#"><img src="static/files/logo.png"></a>  
+<<<<<<< HEAD
+                                                <h1><a class ="btn btn-primary pull-right" href="http://127.0.0.1:8000/generate">Demo</a></h1>
+=======
+                                                <h1><a class ="btn btn-primary pull-right" href="http://127.0.0.1:8000">Demo</a></h1>
+>>>>>>> 0f684d424ab7aa16bdbea4647f07ae563a7e7789
+                                                    
+                                </div>
+                        </div>
+                            <iframe id="preview" src="static/files/iframe.htm" frameborder="0" width="100%" height="710px"></iframe>
+                </div>
+                <script>
+                        $(document).ready(function(){
+                                function fix_height(){
+                                        var h = $("#tray").height();   
+                                        $("#preview").attr("height", (($(window).height()) - h) + "px");
+                                }
+                                $(window).resize(function(){ fix_height(); }).resize();
+                        });
+                </script>
+        
+
+</body></html>
