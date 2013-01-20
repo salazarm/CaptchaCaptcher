@@ -65,7 +65,7 @@ def generate(request):
         is_correct = False
         #here is where u verify
 
-        avg = float(request.POST.get('avg'))
+        avg = -1 * float(request.POST.get('avg'))
         request.session['num-total'] += 1
         if time.time() - request.session['time'] <= TIMEOUT:
             if abs(avg - request.session['ans-offset']) < errorDisp:
@@ -76,7 +76,7 @@ def generate(request):
         request.session['num-correct'] = 0
             
 
-    charSet = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20', '21','22','23','24','25', 'a','b','c','d','e','f','g']
+    charSet = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20', '21','22','23','24','25']#, 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p']
     
     randSet = []
     setLen = 24
@@ -93,11 +93,11 @@ def generate(request):
     # Sample usage 
     x = 150 
     y = 150 
-    r = 100
+    r = 80
     n = 24
     width = 300 
     height = 300  
-    angles = drawLines('static/lock_template.png',randSet,width,height,r,width/2-5,height/2-5,imageUrl)
+    angles = drawLines('static/dial.png',randSet,width,height,r,width/2-5,height/2-5,imageUrl)
 
 
     #get image back

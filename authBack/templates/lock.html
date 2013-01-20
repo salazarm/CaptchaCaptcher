@@ -15,6 +15,7 @@
         margin: 0px;
         padding: 0px;
       }
+      
       #myCanvas {
         border: 1px solid #9C9898;
       }
@@ -99,13 +100,7 @@
 			compatibility.requestAnimationFrame(tick);
 
 			if (video.readyState === video.HAVE_ENOUGH_DATA) {
-			   canvas2= $("#canvas").get(0);
-	           canvas2.width = video.videoWidth;
-	           canvas2.height = video.videoHeight;
-	           context2 = canvas2.getContext('2d');
-	           context2.translate(video.videoWidth,0);
-	           context2.scale(-1,1);
-	           canvas2.getContext('2d').drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+	
 			
 
 				$(video).objectdetect("all", {scaleMin: 3, scaleFactor: 1.1, classifier: objectdetect.frontalface}, function(coords) {
@@ -127,13 +122,24 @@
 						}
 
 
-						$("#glasses").css({
-							"left":    ~~((coords[0] + coords[2] * 1.0/8)*video_ratio + $(video).offset().left) + "px",
-							"top":     ~~((coords[1] + coords[3] * 0.8/8)*video_ratio + $(video).offset().top) + "px",
-							"width":   ~~((coords[2] * 6/8)*video_ratio) + "px",
-							"height":  ~~((coords[3] * 6/8)*video_ratio) + "px",
-							"display": "block"
-						});
+						var canvas = $("#canvas").get(0);
+
+
+                                               ratio = 0.5;
+                                               percentFromLeft = Math.abs(coords[0]/video.videoWidth - 1);
+                                               percentFromTop = Math.abs(coords[1]/video.videoHeight);
+                                               percentWidth = coords[2]/video.videoWidth;
+                                               percentHeight = coords[3]/video.videoHeight;
+
+                                               $("#glasses").css({
+                                                       
+                                                       "left":    ~~((percentFromLeft*$(canvas).width() - percentWidth*$(canvas).width() + $(canvas).offset().left)) + "px",
+                                                       "top":     ~~((percentFromTop*$(canvas).height() + $(canvas).offset().top )) + "px",
+                                                       "width":   ~~((coords[2])) + "px",
+                                                       "height":  ~~((coords[3])) + "px",
+                                                       "display": "block"                                                        
+                                                       
+                                               });
 
 						setLock(coords);
 
@@ -158,7 +164,14 @@
 
 
            //console.log( "x is: " + x + " y is: " + y + "coords: 0,1,2,3,4: " + coords[0] + " " + coords[1] + " " + coords[2] + " " + coords[3] + " " + coords[4]);
-         
+         	canvas2= $("#canvas").get(0);
+                       canvas2.width = video_width;
+                   canvas2.height = video_height;
+                   context2 = canvas2.getContext('2d');
+                   context2.translate(video_width,0);
+                   context2.scale(-1,1);
+                   canvas2.getContext('2d').drawImage(video, 0, 0, video_width, video_height);
+
            lastDisp = displacement
            setPos(displacement)
 
@@ -179,7 +192,7 @@
 		$(document).keyup(function(e){
 			if (e.keyCode == 32){
 				$.ajax({
-	                url: "/",
+	                url: "/generate",
 	                type:"POST",
 	                dataType:"json",
 	                data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'avg': lastDisp},
@@ -187,24 +200,21 @@
 	                    obj = data[0]
 
 	                   //alert(obj.status)
-	                    if(obj.status == "corr"){
-	                    	window.location = obj.url
-	                    } 
-	                    if (obj.left == 0){
+	                    if(obj.status == "corr" || obj.left == 0){
 	                    	window.location = obj.url
 	                    }
+	                    else{
+							last60 = new Array()
+							count = 0
+							dial.src = obj.img;
 
-						last60 = new Array()
-						count = 0
-						dial.src = obj.img;
+							$('#goal').html(obj.ans)
 
-						$('#goal').html(obj.ans)
-
-	                   
-	                	$('#triesLeft').html(obj.left)
-	                	$('#incorrect').show();
-	                	$('#incorrect').fadeOut(1000);
-	                    
+		                   
+		                	$('#triesLeft').html(obj.left)
+		                	$('#incorrect').show();
+		                	$('#incorrect').fadeOut(1000);
+	                    }
 
 						
 	                },
@@ -229,7 +239,7 @@
 			ctx.drawImage( dial, -dialCenter[0], -dialCenter[1] );
 
 			// Center the needle on the canvas.
-			ctx.rotate( displacement/100*Math.PI*2- 0.15 );
+			ctx.rotate( -1*displacement/100*Math.PI*2- 0.15 );
 			ctx.drawImage( needle, -needleCenter[0]+1, -needleCenter[1] );
 
 			ctx.restore();
@@ -312,7 +322,7 @@
 	<div name="pano" id="pano" style="z-index:-1; position: absolute; width: 100%; height: 100%"></div>
 
  	<div id="main">
-    	<div id="tray" class="topbar" sty1le="width: auto;">
+    	<div id="tray" class="topbar" style="width: auto;">
         	<div class="fill">
             	<div class="container">
                  	<a class="brand" href="captchacaptcha.tk"><img src="../static/files/logo.png"></a>  
@@ -346,7 +356,7 @@
 
 			  	<span id ="span6">
 					<video id="video" style="width:578px; margin-right: 5%; display:none" class="pull-right" height="500 "></video>
-					<canvas id="canvas"></video>
+					<canvas id="canvas" style='height:500px' ></canvas>
 				</span>	 
 			</div>
 		</div>
