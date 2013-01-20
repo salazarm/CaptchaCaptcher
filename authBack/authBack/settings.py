@@ -15,8 +15,8 @@ DATABASES = {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
             'NAME': 'penapps',                      # Or path to database file if using sqlite3.
             'USER': 'root',                      # Not used with sqlite3.
-            'PASSWORD': 'root',                  # Not used with sqlite3.
-            'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',                      # Set to empty string for localhost. Not used with sqlite3.
+            'PASSWORD': 'Adolf42',                  # Not used with sqlite3.
+            'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
@@ -122,6 +122,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'authBackend',
     'facebook',
+    'guincorn',
+
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
