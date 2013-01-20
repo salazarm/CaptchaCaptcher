@@ -112,11 +112,11 @@ def generate(request):
         url = ""
 
         if totalNum - request.session['num-total'] <= 0:
-            url = "http://www.youfail.org"
+            url = "http://cdn-static.cnet.co.uk/i/c/eblogs/natelanxon/grandma-robots.jpg"
 
         if request.session['num-correct'] >= 1:
             numLeft = 0
-            url = "http://www.google.com"
+            url = "http://dealwithit.mit.edu"
         else:
             numLeft = totalNum -  request.session['num-total']
 

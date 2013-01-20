@@ -190,7 +190,7 @@
 		needle.src = 'static/needle.png';
 
 		$(document).keyup(function(e){
-			if (e.keyCode == 32){
+			if (e.keyCode == 13){
 				$.ajax({
 	                url: "/generate",
 	                type:"POST",
@@ -332,20 +332,25 @@
 
       <br>
  	
- 	<div id="container-fluid">
+ 	<div class="container-fluid">
 
-		<div id="row-fluid">
+		<div class="row-fluid">
 		  	
-		  	<div id="span12">
-		  		<h1 class="special">Try to find <span style="color:red" id="goal">{{ans}}</span></h1>
-		  		<h3 class="special" align="center">You have <span style="color:red" id="triesLeft">3</span> tries left</h3>
-		  	</div>
+		  	<div class="hero-unit span8" style="padding-left: 0px; margin-left: 70px; margin-right: -80px">
+			  		<h1 class="special">Try to find <span style="color:red" id="goal">{{ans}}</span></h1>
+			  		<h3 class="special" align="center">You have <span style="color:red" id="triesLeft">3</span> tries left</h3>
+			</div>
+			<div class="span4" style="margin-left:10px;">
+			  	<img src="static/files/instructions.jpg" width="53%" height="53	%">
+			</div>
 		 </div>
 
 		 <hr>
-		 <span class="label label-info special offset4">Instructions:</span> Move your head to the left or right to move the needle to the RIGHT and LEFT respectively.
+		 <div class="row-fluid">
+		 <span class="label label-info special offset4" style="font-size:120%;">Instructions:</span><span style="font-size:120%;"> Move your head to the left or right to move the needle to the RIGHT and LEFT respectively.
 		 <span id="incorrect" class="label label-warning special offset5" style="display: none">Incorrect input. Please try again.</span>
-		 <span id="correct" class="label label-success special offset5" style="display: none">Correct input. Good job.</span>
+		 <span id="correct" class="label label-success special offset5" style="display: none">Correct input. Good job.</span></span>
+		</div>
 
 		 <hr>
 		 <div id="row-fluid">
